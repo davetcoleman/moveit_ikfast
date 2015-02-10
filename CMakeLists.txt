@@ -3,8 +3,15 @@ project(moveit_ikfast)
 
 find_package(catkin REQUIRED)
 
-catkin_package()
+catkin_package(
+  INCLUDE_DIRS include
+)
 
+
+include_directories(
+  include 
+  ${catkin_INCLUDE_DIRS}
+)
 
 #############
 ## Install ##
