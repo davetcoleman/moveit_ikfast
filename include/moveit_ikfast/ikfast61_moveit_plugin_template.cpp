@@ -62,48 +62,48 @@ namespace ikfast_kinematics_plugin
 /// The number of values used to represent the parameterization ( >= dof ) is the next 4 bits.
 /// The lower bits contain a unique id of the type.
 enum IkParameterizationType {
-    IKP_None=0,
-    IKP_Transform6D=0x67000001,     ///< end effector reaches desired 6D transformation
-    IKP_Rotation3D=0x34000002,     ///< end effector reaches desired 3D rotation
-    IKP_Translation3D=0x33000003,     ///< end effector origin reaches desired 3D translation
-    IKP_Direction3D=0x23000004,     ///< direction on end effector coordinate system reaches desired direction
-    IKP_Ray4D=0x46000005,     ///< ray on end effector coordinate system reaches desired global ray
-    IKP_Lookat3D=0x23000006,     ///< direction on end effector coordinate system points to desired 3D position
-    IKP_TranslationDirection5D=0x56000007,     ///< end effector origin and direction reaches desired 3D translation and direction. Can be thought of as Ray IK where the origin of the ray must coincide.
-    IKP_TranslationXY2D=0x22000008,     ///< 2D translation along XY plane
-    IKP_TranslationXYOrientation3D=0x33000009,     ///< 2D translation along XY plane and 1D rotation around Z axis. The offset of the rotation is measured starting at +X, so at +X is it 0, at +Y it is pi/2.
-    IKP_TranslationLocalGlobal6D=0x3600000a,     ///< local point on end effector origin reaches desired 3D global point
+  IKP_None=0,
+  IKP_Transform6D=0x67000001,     ///< end effector reaches desired 6D transformation
+  IKP_Rotation3D=0x34000002,     ///< end effector reaches desired 3D rotation
+  IKP_Translation3D=0x33000003,     ///< end effector origin reaches desired 3D translation
+  IKP_Direction3D=0x23000004,     ///< direction on end effector coordinate system reaches desired direction
+  IKP_Ray4D=0x46000005,     ///< ray on end effector coordinate system reaches desired global ray
+  IKP_Lookat3D=0x23000006,     ///< direction on end effector coordinate system points to desired 3D position
+  IKP_TranslationDirection5D=0x56000007,     ///< end effector origin and direction reaches desired 3D translation and direction. Can be thought of as Ray IK where the origin of the ray must coincide.
+  IKP_TranslationXY2D=0x22000008,     ///< 2D translation along XY plane
+  IKP_TranslationXYOrientation3D=0x33000009,     ///< 2D translation along XY plane and 1D rotation around Z axis. The offset of the rotation is measured starting at +X, so at +X is it 0, at +Y it is pi/2.
+  IKP_TranslationLocalGlobal6D=0x3600000a,     ///< local point on end effector origin reaches desired 3D global point
 
-    IKP_TranslationXAxisAngle4D=0x4400000b, ///< end effector origin reaches desired 3D translation, manipulator direction makes a specific angle with x-axis  like a cone, angle is from 0-pi. Axes defined in the manipulator base link's coordinate system)
-    IKP_TranslationYAxisAngle4D=0x4400000c, ///< end effector origin reaches desired 3D translation, manipulator direction makes a specific angle with y-axis  like a cone, angle is from 0-pi. Axes defined in the manipulator base link's coordinate system)
-    IKP_TranslationZAxisAngle4D=0x4400000d, ///< end effector origin reaches desired 3D translation, manipulator direction makes a specific angle with z-axis like a cone, angle is from 0-pi. Axes are defined in the manipulator base link's coordinate system.
+  IKP_TranslationXAxisAngle4D=0x4400000b, ///< end effector origin reaches desired 3D translation, manipulator direction makes a specific angle with x-axis  like a cone, angle is from 0-pi. Axes defined in the manipulator base link's coordinate system)
+  IKP_TranslationYAxisAngle4D=0x4400000c, ///< end effector origin reaches desired 3D translation, manipulator direction makes a specific angle with y-axis  like a cone, angle is from 0-pi. Axes defined in the manipulator base link's coordinate system)
+  IKP_TranslationZAxisAngle4D=0x4400000d, ///< end effector origin reaches desired 3D translation, manipulator direction makes a specific angle with z-axis like a cone, angle is from 0-pi. Axes are defined in the manipulator base link's coordinate system.
 
-    IKP_TranslationXAxisAngleZNorm4D=0x4400000e, ///< end effector origin reaches desired 3D translation, manipulator direction needs to be orthogonal to z-axis and be rotated at a certain angle starting from the x-axis (defined in the manipulator base link's coordinate system)
-    IKP_TranslationYAxisAngleXNorm4D=0x4400000f, ///< end effector origin reaches desired 3D translation, manipulator direction needs to be orthogonal to x-axis and be rotated at a certain angle starting from the y-axis (defined in the manipulator base link's coordinate system)
-    IKP_TranslationZAxisAngleYNorm4D=0x44000010, ///< end effector origin reaches desired 3D translation, manipulator direction needs to be orthogonal to y-axis and be rotated at a certain angle starting from the z-axis (defined in the manipulator base link's coordinate system)
+  IKP_TranslationXAxisAngleZNorm4D=0x4400000e, ///< end effector origin reaches desired 3D translation, manipulator direction needs to be orthogonal to z-axis and be rotated at a certain angle starting from the x-axis (defined in the manipulator base link's coordinate system)
+  IKP_TranslationYAxisAngleXNorm4D=0x4400000f, ///< end effector origin reaches desired 3D translation, manipulator direction needs to be orthogonal to x-axis and be rotated at a certain angle starting from the y-axis (defined in the manipulator base link's coordinate system)
+  IKP_TranslationZAxisAngleYNorm4D=0x44000010, ///< end effector origin reaches desired 3D translation, manipulator direction needs to be orthogonal to y-axis and be rotated at a certain angle starting from the z-axis (defined in the manipulator base link's coordinate system)
 
-    IKP_NumberOfParameterizations=16,     ///< number of parameterizations (does not count IKP_None)
+  IKP_NumberOfParameterizations=16,     ///< number of parameterizations (does not count IKP_None)
 
-    IKP_VelocityDataBit = 0x00008000, ///< bit is set if the data represents the time-derivate velocity of an IkParameterization
-    IKP_Transform6DVelocity = IKP_Transform6D|IKP_VelocityDataBit,
-    IKP_Rotation3DVelocity = IKP_Rotation3D|IKP_VelocityDataBit,
-    IKP_Translation3DVelocity = IKP_Translation3D|IKP_VelocityDataBit,
-    IKP_Direction3DVelocity = IKP_Direction3D|IKP_VelocityDataBit,
-    IKP_Ray4DVelocity = IKP_Ray4D|IKP_VelocityDataBit,
-    IKP_Lookat3DVelocity = IKP_Lookat3D|IKP_VelocityDataBit,
-    IKP_TranslationDirection5DVelocity = IKP_TranslationDirection5D|IKP_VelocityDataBit,
-    IKP_TranslationXY2DVelocity = IKP_TranslationXY2D|IKP_VelocityDataBit,
-    IKP_TranslationXYOrientation3DVelocity = IKP_TranslationXYOrientation3D|IKP_VelocityDataBit,
-    IKP_TranslationLocalGlobal6DVelocity = IKP_TranslationLocalGlobal6D|IKP_VelocityDataBit,
-    IKP_TranslationXAxisAngle4DVelocity = IKP_TranslationXAxisAngle4D|IKP_VelocityDataBit,
-    IKP_TranslationYAxisAngle4DVelocity = IKP_TranslationYAxisAngle4D|IKP_VelocityDataBit,
-    IKP_TranslationZAxisAngle4DVelocity = IKP_TranslationZAxisAngle4D|IKP_VelocityDataBit,
-    IKP_TranslationXAxisAngleZNorm4DVelocity = IKP_TranslationXAxisAngleZNorm4D|IKP_VelocityDataBit,
-    IKP_TranslationYAxisAngleXNorm4DVelocity = IKP_TranslationYAxisAngleXNorm4D|IKP_VelocityDataBit,
-    IKP_TranslationZAxisAngleYNorm4DVelocity = IKP_TranslationZAxisAngleYNorm4D|IKP_VelocityDataBit,
+  IKP_VelocityDataBit = 0x00008000, ///< bit is set if the data represents the time-derivate velocity of an IkParameterization
+  IKP_Transform6DVelocity = IKP_Transform6D|IKP_VelocityDataBit,
+  IKP_Rotation3DVelocity = IKP_Rotation3D|IKP_VelocityDataBit,
+  IKP_Translation3DVelocity = IKP_Translation3D|IKP_VelocityDataBit,
+  IKP_Direction3DVelocity = IKP_Direction3D|IKP_VelocityDataBit,
+  IKP_Ray4DVelocity = IKP_Ray4D|IKP_VelocityDataBit,
+  IKP_Lookat3DVelocity = IKP_Lookat3D|IKP_VelocityDataBit,
+  IKP_TranslationDirection5DVelocity = IKP_TranslationDirection5D|IKP_VelocityDataBit,
+  IKP_TranslationXY2DVelocity = IKP_TranslationXY2D|IKP_VelocityDataBit,
+  IKP_TranslationXYOrientation3DVelocity = IKP_TranslationXYOrientation3D|IKP_VelocityDataBit,
+  IKP_TranslationLocalGlobal6DVelocity = IKP_TranslationLocalGlobal6D|IKP_VelocityDataBit,
+  IKP_TranslationXAxisAngle4DVelocity = IKP_TranslationXAxisAngle4D|IKP_VelocityDataBit,
+  IKP_TranslationYAxisAngle4DVelocity = IKP_TranslationYAxisAngle4D|IKP_VelocityDataBit,
+  IKP_TranslationZAxisAngle4DVelocity = IKP_TranslationZAxisAngle4D|IKP_VelocityDataBit,
+  IKP_TranslationXAxisAngleZNorm4DVelocity = IKP_TranslationXAxisAngleZNorm4D|IKP_VelocityDataBit,
+  IKP_TranslationYAxisAngleXNorm4DVelocity = IKP_TranslationYAxisAngleXNorm4D|IKP_VelocityDataBit,
+  IKP_TranslationZAxisAngleYNorm4DVelocity = IKP_TranslationZAxisAngleYNorm4D|IKP_VelocityDataBit,
 
-    IKP_UniqueIdMask = 0x0000ffff, ///< the mask for the unique ids
-    IKP_CustomDataBit = 0x00010000, ///< bit is set if the ikparameterization contains custom data, this is only used when serializing the ik parameterizations
+  IKP_UniqueIdMask = 0x0000ffff, ///< the mask for the unique ids
+  IKP_CustomDataBit = 0x00010000, ///< bit is set if the ikparameterization contains custom data, this is only used when serializing the ik parameterizations
 };
 
 class IKFastKinematicsPlugin : public kinematics::KinematicsBase
@@ -229,9 +229,9 @@ private:
                   const std::string& base_name,
                   const std::string& tip_name,
                   double search_discretization)
-    {
-      ROS_ERROR_STREAM_NAMED("kdl","This initialization function is deprecated and not implemented");
-    }
+  {
+    ROS_ERROR_STREAM_NAMED("kdl","This initialization function is deprecated and not implemented");
+  }
 
   bool initialize(const robot_model::RobotModel* robot_model,
                   const std::string &group_name,
@@ -258,10 +258,10 @@ private:
 }; // end class
 
 bool IKFastKinematicsPlugin::initialize(const robot_model::RobotModel* robot_model,
-                                     const std::string& group_name,
-                                     const std::string& base_frame,
-                                     const std::vector<std::string>& tip_frames,
-                                     double search_discretization)                                     
+                                        const std::string& group_name,
+                                        const std::string& base_frame,
+                                        const std::vector<std::string>& tip_frames,
+                                        double search_discretization)
 {
   setValues("", group_name, base_frame, tip_frames[0], search_discretization);
 
@@ -605,13 +605,13 @@ bool IKFastKinematicsPlugin::getPositionFK(const std::vector<std::string> &link_
 }
 
 bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
-                                           const std::vector<double> &ik_seed_state,
-                                           double timeout,
-                                           std::vector<double> &solution,
-                                           moveit_msgs::MoveItErrorCodes &error_code,
-                                           const kinematics::KinematicsQueryOptions &options) const
+                                              const std::vector<double> &ik_seed_state,
+                                              double timeout,
+                                              std::vector<double> &solution,
+                                              moveit_msgs::MoveItErrorCodes &error_code,
+                                              const kinematics::KinematicsQueryOptions &options) const
 {
-  const IKCallbackFn solution_callback = 0; 
+  const IKCallbackFn solution_callback = 0;
   std::vector<double> consistency_limits;
 
   return searchPositionIK(ik_pose,
@@ -623,16 +623,16 @@ bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose
                           error_code,
                           options);
 }
-    
+
 bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
-                                           const std::vector<double> &ik_seed_state,
-                                           double timeout,
-                                           const std::vector<double> &consistency_limits,
-                                           std::vector<double> &solution,
-                                           moveit_msgs::MoveItErrorCodes &error_code,
-                                           const kinematics::KinematicsQueryOptions &options) const
+                                              const std::vector<double> &ik_seed_state,
+                                              double timeout,
+                                              const std::vector<double> &consistency_limits,
+                                              std::vector<double> &solution,
+                                              moveit_msgs::MoveItErrorCodes &error_code,
+                                              const kinematics::KinematicsQueryOptions &options) const
 {
-  const IKCallbackFn solution_callback = 0; 
+  const IKCallbackFn solution_callback = 0;
   return searchPositionIK(ik_pose,
                           ik_seed_state,
                           timeout,
@@ -644,12 +644,12 @@ bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose
 }
 
 bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
-                                           const std::vector<double> &ik_seed_state,
-                                           double timeout,
-                                           std::vector<double> &solution,
-                                           const IKCallbackFn &solution_callback,
-                                           moveit_msgs::MoveItErrorCodes &error_code,
-                                           const kinematics::KinematicsQueryOptions &options) const
+                                              const std::vector<double> &ik_seed_state,
+                                              double timeout,
+                                              std::vector<double> &solution,
+                                              const IKCallbackFn &solution_callback,
+                                              moveit_msgs::MoveItErrorCodes &error_code,
+                                              const kinematics::KinematicsQueryOptions &options) const
 {
   std::vector<double> consistency_limits;
   return searchPositionIK(ik_pose,
@@ -774,8 +774,8 @@ bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose
 
   ROS_DEBUG_STREAM_NAMED("ikfast","Free param is " << free_params_[0] << " initial guess is " << initial_guess << ", # positive increments: " << num_positive_increments << ", # negative increments: " << num_negative_increments);
   if ((search_mode & OPTIMIZE_MAX_JOINT) && (num_positive_increments + num_negative_increments) > 1000)
-      ROS_WARN_STREAM_ONCE_NAMED("ikfast", "Large search space, consider increasing the search discretization");
-  
+    ROS_WARN_STREAM_ONCE_NAMED("ikfast", "Large search space, consider increasing the search discretization");
+
   double best_costs = -1.0;
   std::vector<double> best_solution;
   int nattempts = 0, nvalid = 0;
@@ -884,7 +884,7 @@ bool IKFastKinematicsPlugin::getPositionIK(const geometry_msgs::Pose &ik_pose,
 
   if(!active_)
   {
-    ROS_ERROR("kinematics not active");    
+    ROS_ERROR("kinematics not active");
     return false;
   }
 
