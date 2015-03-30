@@ -61,7 +61,10 @@ const double LIMIT_TOLERANCE = .0000001;
  *       callbacks for collision checking are used, a coarse-to-fine search scheme might be needed.  
  *       getCount() was called with a positive third argument. Thus, no search in negative direction was performed.
  */
-enum SEARCH_MODE { OPTIMIZE_FREE_JOINT=1, OPTIMIZE_MAX_JOINT=2 };
+enum SEARCH_MODE { 
+  OPTIMIZE_FREE_JOINT=1, 
+  OPTIMIZE_MAX_JOINT=2 
+};
 
 namespace ikfast_kinematics_plugin
 {
@@ -754,7 +757,8 @@ bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose
   // -------------------------------------------------------------------------------------------------
   // Initialize
   
-  SEARCH_MODE search_mode = OPTIMIZE_MAX_JOINT; // search_mode is currently fixed during code generation
+  //SEARCH_MODE search_mode = OPTIMIZE_MAX_JOINT; // search_mode is currently fixed during code generation
+  SEARCH_MODE search_mode = OPTIMIZE_FREE_JOINT;
 
   KDL::Frame frame;
   tf::poseMsgToKDL(ik_pose,frame);
