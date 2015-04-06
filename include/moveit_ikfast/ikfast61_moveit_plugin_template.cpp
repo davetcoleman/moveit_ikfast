@@ -757,8 +757,8 @@ bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose
   // -------------------------------------------------------------------------------------------------
   // Initialize
   
-  //SEARCH_MODE search_mode = OPTIMIZE_MAX_JOINT; // search_mode is currently fixed during code generation
-  SEARCH_MODE search_mode = OPTIMIZE_FREE_JOINT;
+  SEARCH_MODE search_mode = OPTIMIZE_MAX_JOINT; // search_mode is currently fixed during code generation
+  //SEARCH_MODE search_mode = OPTIMIZE_FREE_JOINT;
 
   KDL::Frame frame;
   tf::poseMsgToKDL(ik_pose,frame);
