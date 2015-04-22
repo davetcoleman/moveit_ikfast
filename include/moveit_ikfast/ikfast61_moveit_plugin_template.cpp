@@ -289,6 +289,8 @@ bool IKFastKinematicsPlugin::initialize(const robot_model::RobotModel* robot_mod
 {
   setValues("", group_name, base_frame, tip_frames[0], search_discretization);
 
+  ROS_DEBUG_STREAM_NAMED("ikfast","Group name: " << group_name << ", Base frame: " << base_frame << ", Tip frame: " << tip_frames[0]);
+
   ros::NodeHandle node_handle("~/"+group_name);
 
   std::string robot;
@@ -757,8 +759,8 @@ bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose
   // -------------------------------------------------------------------------------------------------
   // Initialize
   
-  SEARCH_MODE search_mode = OPTIMIZE_MAX_JOINT; // search_mode is currently fixed during code generation
-  //SEARCH_MODE search_mode = OPTIMIZE_FREE_JOINT;
+  //SEARCH_MODE search_mode = OPTIMIZE_MAX_JOINT; // search_mode is currently fixed during code generation
+  SEARCH_MODE search_mode = OPTIMIZE_FREE_JOINT;
 
   KDL::Frame frame;
   tf::poseMsgToKDL(ik_pose,frame);
