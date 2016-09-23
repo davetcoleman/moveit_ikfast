@@ -53,17 +53,17 @@ const double LIMIT_TOLERANCE = .0000001;
 
 /**
  * \brief Search modes for searchPositionIK()
- * \desc Previously searchPositionIK() returned the first collision-free solution within joint limits it finds. 
- *       (The free joint is moved as little as possible.) 
- *       This approach regularly leads to large and ugly motions in joint space even for small displacements of the EE. Instead, 
- *       the solution with the smallest costs should be returned. Here, the largest motion of any joint is taken as the cost term. 
- *       Trajectories become much smoother. Due to the speed of IK fast, it is ok to search the entire search space. However, if 
- *       callbacks for collision checking are used, a coarse-to-fine search scheme might be needed.  
+ * \desc Previously searchPositionIK() returned the first collision-free solution within joint limits it finds.
+ *       (The free joint is moved as little as possible.)
+ *       This approach regularly leads to large and ugly motions in joint space even for small displacements of the EE. Instead,
+ *       the solution with the smallest costs should be returned. Here, the largest motion of any joint is taken as the cost term.
+ *       Trajectories become much smoother. Due to the speed of IK fast, it is ok to search the entire search space. However, if
+ *       callbacks for collision checking are used, a coarse-to-fine search scheme might be needed.
  *       getCount() was called with a positive third argument. Thus, no search in negative direction was performed.
  */
-enum SEARCH_MODE { 
-  OPTIMIZE_FREE_JOINT=1, 
-  OPTIMIZE_MAX_JOINT=2 
+enum SEARCH_MODE {
+  OPTIMIZE_FREE_JOINT=1,
+  OPTIMIZE_MAX_JOINT=2
 };
 
 namespace ikfast_kinematics_plugin
@@ -131,15 +131,15 @@ class IKFastKinematicsPlugin : public kinematics::KinematicsBase
   bool active_; // Internal variable that indicates whether solvers are configured and ready
 
   /** \brief Get joint names */
-  const std::vector<std::string>& getJointNames() const 
-  { 
-    return joint_names_; 
+  const std::vector<std::string>& getJointNames() const
+  {
+    return joint_names_;
   }
 
   /** \brief Get link names */
-  const std::vector<std::string>& getLinkNames() const 
-  { 
-    return link_names_; 
+  const std::vector<std::string>& getLinkNames() const
+  {
+    return link_names_;
   }
 
 public:
@@ -254,7 +254,30 @@ private:
                   const std::string& tip_name,
                   double search_discretization)
   {
-    ROS_ERROR_STREAM_NAMED("kdl","This initialization function is deprecated and not implemented");
+    urdf::Model robot_model;
+    std::string xml_string;
+    std::string urdf_xml;
+    std::string full_urdf_xml;
+
+    ros::NodeHandle node_handle("~/"+group_name);
+
+    node_handle.param("urdf_xml", urdf_xml, robot_description);
+    node_handle.searchParam(urdf_xml,full_urdf_xml);
+
+    ROS_DEBUG_NAMED("ikfast","Reading xml file from parameter server");
+    if (!node_handle.getParam(full_urdf_xml, xml_string))
+    {
+      ROS_FATAL_NAMED("ikfast","Could not load the xml from parameter server: %s", urdf_xml.c_str());
+      return false;
+    }
+
+    node_handle.param(full_urdf_xml, xml_string, std::string());
+    robot_model.initString(xml_string);
+
+    std::vector<std::string> tip_frames;
+    tip_frames.push_back(tip_name);
+
+    return initialize(robot_model, group_name, base_name, tip_frames, search_discretization);
   }
 
   bool initialize(const robot_model::RobotModel* robot_model,
@@ -262,6 +285,13 @@ private:
                   const std::string &base_name,
                   const std::vector<std::string>& tip_frames,
                   double search_discretization);
+
+  bool initialize(const urdf::ModelInterface& robot_model,
+                  const std::string &group_name,
+                  const std::string &base_name,
+                  const std::vector<std::string>& tip_frames,
+                  double search_discretization);
+
   /**
    * @brief Calls the IK solver from IKFast
    * @return The number of solutions found
@@ -287,6 +317,15 @@ bool IKFastKinematicsPlugin::initialize(const robot_model::RobotModel* robot_mod
                                         const std::vector<std::string>& tip_frames,
                                         double search_discretization)
 {
+  return initialize(*(robot_model->getURDF().get()), group_name, base_frame, tip_frames, search_discretization);
+}
+
+bool IKFastKinematicsPlugin::initialize(const urdf::ModelInterface& robot_model,
+                                        const std::string &group_name,
+                                        const std::string &base_frame,
+                                        const std::vector<std::string>& tip_frames,
+                                        double search_discretization)
+{
   setValues("", group_name, base_frame, tip_frames[0], search_discretization);
 
   ROS_DEBUG_STREAM_NAMED("ikfast","Group name: " << group_name << ", Base frame: " << base_frame << ", Tip frame: " << tip_frames[0]);
@@ -308,7 +347,7 @@ bool IKFastKinematicsPlugin::initialize(const robot_model::RobotModel* robot_mod
 
   ROS_DEBUG_STREAM_NAMED("ikfast","Reading joints and links from URDF");
 
-  boost::shared_ptr<urdf::Link> link = boost::const_pointer_cast<urdf::Link>(robot_model->getURDF()->getLink(getTipFrame()));
+  boost::shared_ptr<urdf::Link> link = boost::const_pointer_cast<urdf::Link>(robot_model.getLink(getTipFrame()));
   while(link->name != base_frame_ && joint_names_.size() <= num_joints_)
   {
     ROS_DEBUG_NAMED("ikfast","Link %s",link->name.c_str());
@@ -758,7 +797,7 @@ bool IKFastKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose
 
   // -------------------------------------------------------------------------------------------------
   // Initialize
-  
+
   //SEARCH_MODE search_mode = OPTIMIZE_MAX_JOINT; // search_mode is currently fixed during code generation
   SEARCH_MODE search_mode = OPTIMIZE_FREE_JOINT;
 

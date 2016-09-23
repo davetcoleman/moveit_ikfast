@@ -9,7 +9,7 @@ catkin_package(
 
 
 include_directories(
-  include 
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -20,10 +20,10 @@ include_directories(
 #catkin_python_setup()
 
 install(
-  PROGRAMS 
+  PROGRAMS
     scripts/create_ikfast_moveit_plugin.py
     scripts/round_collada_numbers.py
-  DESTINATION 
+  DESTINATION
     ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -32,4 +32,9 @@ install(
     templates
   DESTINATION
     ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+# Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
